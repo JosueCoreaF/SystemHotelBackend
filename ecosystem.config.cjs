@@ -3,12 +3,13 @@ module.exports = {
     {
       name: "verona-server",
       script: "./dist/server.js",
+      exec_mode: "fork",
+      instances: 1,
       env: {
         NODE_ENV: "production",
       },
       max_memory_restart: "300M",
       watch: false,
-      instances: 1,
       autorestart: true,
     },
     {

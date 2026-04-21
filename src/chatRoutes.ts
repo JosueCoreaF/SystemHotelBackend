@@ -226,6 +226,32 @@ export function registerChatRoutes(app: Express, io?: SocketServer) {
     });
   }));
 
+  // ─── Admin: eliminar canal (y sus mensajes) ───────────────────────
+  app.delete('/api/chat/channels/:channelId', asyncHandler(async (req, res) => {
+    const userId = extractUserId(req);
+    if (!userId) throw new ApiError(401, 'No autenticado.');
+
+    const { channelId } = req.params;
+
+    // Solo se pueden eliminar canales tipo 'cliente' desde aquí
+    const { rows } = await pool.query(
+      `SELECT id, channel_type FROM public.chat_channels WHERE id = $1`,
+      [channelId],
+    );
+    if (rows.length === 0) throw new ApiError(404, 'Canal no encontrado.');
+
+    // Eliminar mensajes, referencias y el canal en cascada
+    await pool.query(`DELETE FROM public.chat_references WHERE message_id IN (SELECT id FROM public.chat_messages WHERE channel_id = $1)`, [channelId]);
+    await pool.query(`DELETE FROM public.chat_read_status WHERE channel_id = $1`, [channelId]);
+    await pool.query(`DELETE FROM public.chat_messages WHERE channel_id = $1`, [channelId]);
+    await pool.query(`DELETE FROM public.chat_channels WHERE id = $1`, [channelId]);
+
+    // Notificar a los clientes conectados que el canal fue eliminado
+    if (_io) _io.to(`channel:${channelId}`).emit('channel_deleted', { channelId });
+
+    res.json({ ok: true });
+  }));
+
   // Guest polls for new messages
   app.get('/api/public/chat/messages/:channelId', asyncHandler(async (req, res) => {
     const channelId = req.params.channelId;
