@@ -246,7 +246,7 @@ export async function extractReservationsFromXlsx(buffer: Buffer): Promise<any[]
 
       // Mapear columnas a habitaciones desde esta fila de encabezado
       const habitacionMap: Record<number, string> = {};
-      row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+      row.eachCell({ includeEmpty: true }, (cell: ExcelJS.Cell, colNumber: number) => {
         if (colNumber >= 4) {
           const numHab = getCellText(cell);
           const nombreHab = getCellText(nextRow.getCell(colNumber));
@@ -256,7 +256,7 @@ export async function extractReservationsFromXlsx(buffer: Buffer): Promise<any[]
         }
       });
       // Revisar fila 2 también para columnas que solo tienen nombre en la segunda fila
-      nextRow.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+      nextRow.eachCell({ includeEmpty: true }, (cell: ExcelJS.Cell, colNumber: number) => {
         if (colNumber >= 4 && !habitacionMap[colNumber]) {
           const val = getCellText(cell);
           if (val) habitacionMap[colNumber] = val;
