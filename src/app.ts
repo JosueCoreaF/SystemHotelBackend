@@ -675,6 +675,8 @@ const guestPayloadSchema = z.object({
 const activityPayloadSchema = z.object({
   nombreActividad: z.string().trim().min(3).optional(),
   nombreHabitacion: z.string().trim().min(3).optional(),
+  nombre_habitacion: z.string().trim().min(3).optional(),
+  nombre_alias: z.string().trim().nullable().optional(),
   descripcion: z.string().trim().min(3),
   tipo: z.enum(['Clase grupal', 'Servicio']),
   sedeId: z.string().uuid().optional(),
@@ -683,22 +685,27 @@ const activityPayloadSchema = z.object({
   responsableId: z.string().uuid().nullable().optional(),
   horario: z.string().datetime().optional(),
   cupoMaximo: z.number().int().positive(),
+  capacidad: z.number().int().positive().optional(),
   costo: z.number().min(0),
   codigoHabitacion: z.string().trim().min(1).max(30).regex(/^[A-Za-z0-9-]+$/).optional(),
   piso: z.number().int().min(0).optional(),
   estadoOperativo: z.enum(['disponible', 'ocupada', 'mantenimiento', 'bloqueada', 'limpieza']).optional(),
+  estado: z.enum(['disponible', 'ocupada', 'mantenimiento', 'bloqueada', 'limpieza']).optional(),
+  cargo_persona_extra: z.number().min(0).optional(),
 }).transform((payload) => ({
-  nombreActividad: payload.nombreHabitacion ?? payload.nombreActividad ?? '',
+  nombreActividad: payload.nombre_habitacion ?? payload.nombreHabitacion ?? payload.nombreActividad ?? '',
+  nombre_alias: payload.nombre_alias ?? null,
   descripcion: payload.descripcion,
   tipo: payload.tipo,
   sedeId: payload.hotelId ?? payload.sedeId ?? '',
   entrenadorId: payload.responsableId ?? payload.entrenadorId ?? null,
   horario: payload.horario,
-  cupoMaximo: payload.cupoMaximo,
+  cupoMaximo: payload.capacidad ?? payload.cupoMaximo,
   costo: payload.costo,
   codigoHabitacion: payload.codigoHabitacion?.trim().toUpperCase() ?? '',
   piso: payload.piso ?? 1,
-  estadoOperativo: payload.estadoOperativo ?? 'disponible',
+  estadoOperativo: payload.estado ?? payload.estadoOperativo ?? 'disponible',
+  cargo_persona_extra: payload.cargo_persona_extra ?? 0,
 }));
 
 const reservationPayloadSchema = z.object({
@@ -1501,11 +1508,12 @@ app.put('/api/habitaciones/:id', requirePermission('habitaciones', 'write'), asy
             id_tipo_habitacion = $3,
             codigo_habitacion = $4,
             nombre_habitacion = $5,
+            nombre_alias = $11,
             piso = $6,
             capacidad = $7,
             tarifa_noche = $8,
             estado = $9,
-            descripcion = $10
+            cargo_persona_extra = $12
         where id_habitacion = $1
       `,
       [
@@ -1519,6 +1527,8 @@ app.put('/api/habitaciones/:id', requirePermission('habitaciones', 'write'), asy
         payload.costo,
         payload.estadoOperativo,
         payload.descripcion,
+        payload.nombre_alias,
+        payload.cargo_persona_extra,
       ],
     );
   });
