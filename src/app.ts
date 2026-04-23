@@ -1,6 +1,5 @@
 import cors from 'cors';
 import express from 'express';
-import path from 'path';
 import type { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 import { pool, withTransaction } from './db.js';
@@ -29,13 +28,9 @@ app.use(cors({
 }));
 app.use(express.json({ limit: '50mb' }));
 
-// Servir el frontend compilado (dist/) en el mismo puerto que la API
-const frontendPath = path.join(process.cwd(), 'dist');
-app.use(express.static(frontendPath));
-
-// Forzar la carga del index en el root
-app.get('/', (_req, res) => {
-  res.sendFile(path.join(frontendPath, 'index.html'));
+// Health check endpoint used by deploy scripts
+app.get('/api/health', (_req, res) => {
+  res.json({ status: 'ok', now: new Date().toISOString() });
 });
 
 registerExtractorRoutes(app);
@@ -2621,10 +2616,14 @@ app.get('/api/public/disponibilidad', asyncHandler(async (request, response) => 
       h.tarifa_noche as "tarifaNoche",
       coalesce(h.cargo_persona_extra, 0) as "cargoPersonaExtra",
       hotel.nombre_hotel as hotel,
-      hotel.id_hotel as "hotelId"
+      hotel.id_hotel as "hotelId",
+      coalesce(h.numero_camas, 1) as "numeroCamas",
+      h.nombre_alias as "nombreAlias",
+      coalesce(h.visible, true) as visible
     from public.habitaciones h
     join public.hoteles hotel on hotel.id_hotel = h.id_hotel
     left join public.tipos_habitacion t on t.id_tipo_habitacion = h.id_tipo_habitacion
+    where coalesce(h.visible, true) = true
     order by hotel.nombre_hotel asc, h.codigo_habitacion asc
   `);
 
@@ -2770,13 +2769,6 @@ app.get('/api/public/local-guide', asyncHandler(async (_request, response) => {
   `);
   response.json(result.rows);
 }));
-
-app.use((req: Request, res: Response, next: NextFunction) => {
-  if (req.method === 'GET' && !req.path.startsWith('/api')) {
-    return res.sendFile(path.join(frontendPath, 'index.html'));
-  }
-  next();
-});
 
 app.use((error: unknown, _request: Request, response: Response, _next: NextFunction) => {
   if (error instanceof z.ZodError) {
