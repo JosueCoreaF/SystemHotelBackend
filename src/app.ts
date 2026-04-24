@@ -1559,8 +1559,8 @@ app.patch('/api/habitaciones/:id/info', requirePermission('habitaciones', 'write
   if (!existing) throw new ApiError(404, 'Habitación no encontrada.');
 
   await pool.query(
-    'update public.habitaciones set nombre_habitacion = coalesce($2, nombre_habitacion), capacidad = coalesce($3, capacidad), estado = coalesce($4, estado), cargo_persona_extra = coalesce($5, cargo_persona_extra) where id_habitacion = $1',
-    [id, payload.nombre_habitacion ?? null, payload.capacidad ?? null, payload.estado ?? null, payload.cargo_persona_extra ?? null],
+    'update public.habitaciones set nombre_habitacion = coalesce($2, nombre_habitacion), capacidad = coalesce($3, capacidad), estado = coalesce($4, estado), cargo_persona_extra = coalesce($5, cargo_persona_extra), nombre_alias = coalesce($6, nombre_alias), tipo = coalesce($7, tipo) where id_habitacion = $1',
+    [id, payload.nombre_habitacion ?? null, payload.capacidad ?? null, payload.estado ?? null, payload.cargo_persona_extra ?? null, payload.nombre_alias ?? null, payload.tipo ?? null],
   );
 
   const room = await getFreshRoomById(id);
