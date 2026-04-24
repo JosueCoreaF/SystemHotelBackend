@@ -7,6 +7,8 @@ import { registerExtractorRoutes } from './extractorRoutes.js';
 import { registerEmpresasRoutes } from './empresasRoutes.js';
 import { ApiError, asyncHandler } from './http.js';
 import { extractUserId, requirePermission } from './permissions.js';
+import fs from 'fs';
+import path from 'path';
 
 const app = express();
 
@@ -2780,6 +2782,26 @@ app.get('/api/public/local-guide', asyncHandler(async (_request, response) => {
     order by sort_order asc, created_at desc
   `);
   response.json(result.rows);
+}));
+
+// Endpoint temporal para recibir logs del cliente (solo para desarrollo)
+app.post('/api/debug/client-logs', asyncHandler(async (request, response) => {
+  if (process.env.NODE_ENV === 'production') {
+    response.status(404).json({ message: 'Not found' });
+    return;
+  }
+
+  const logs = Array.isArray(request.body?.logs) ? request.body.logs : [];
+  const ts = new Date().toISOString().replace(/[:.]/g, '-');
+  const dir = path.join(process.cwd(), 'reportes_generados');
+  await fs.promises.mkdir(dir, { recursive: true });
+  const filename = path.join(dir, `client-logs-${ts}.txt`);
+
+  const content = (logs as any[]).map(l => (typeof l === 'string' ? l : JSON.stringify(l, null, 2))).join('\n\n');
+  await fs.promises.writeFile(filename, content, 'utf8');
+
+  console.info(`[debug] Client logs recibidos: ${filename}`);
+  response.status(201).json({ ok: true, path: filename });
 }));
 
 app.use((error: unknown, _request: Request, response: Response, _next: NextFunction) => {
