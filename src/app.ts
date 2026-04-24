@@ -1,5 +1,7 @@
 import cors from 'cors';
 import express from 'express';
+import fs from 'fs/promises';
+import path from 'path';
 import type { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 import { pool, withTransaction } from './db.js';
@@ -7,8 +9,6 @@ import { registerExtractorRoutes } from './extractorRoutes.js';
 import { registerEmpresasRoutes } from './empresasRoutes.js';
 import { ApiError, asyncHandler } from './http.js';
 import { extractUserId, requirePermission } from './permissions.js';
-import fs from 'fs';
-import path from 'path';
 
 const app = express();
 
@@ -2784,24 +2784,29 @@ app.get('/api/public/local-guide', asyncHandler(async (_request, response) => {
   response.json(result.rows);
 }));
 
-// Endpoint temporal para recibir logs del cliente (solo para desarrollo)
+// Dev-only: recibir logs del cliente para diagnóstico en entorno local
 app.post('/api/debug/client-logs', asyncHandler(async (request, response) => {
-  if (process.env.NODE_ENV === 'production') {
-    response.status(404).json({ message: 'Not found' });
-    return;
+  // Protegemos para que no esté accesible en producción por defecto,
+  // pero permitimos envíos desde localhost para facilitar desarrollo local.
+  const hostHeader = String(request.headers.host ?? '').split(':')[0];
+  if (process.env.NODE_ENV === 'production' && hostHeader !== 'localhost' && hostHeader !== '127.0.0.1') {
+    throw new ApiError(404, 'Not found');
   }
 
-  const logs = Array.isArray(request.body?.logs) ? request.body.logs : [];
-  const ts = new Date().toISOString().replace(/[:.]/g, '-');
+  const payload = request.body as any;
+  if (!payload || !Array.isArray(payload.logs)) {
+    return response.status(400).json({ error: 'invalid payload, expected { logs: [] }' });
+  }
+
   const dir = path.join(process.cwd(), 'reportes_generados');
-  await fs.promises.mkdir(dir, { recursive: true });
-  const filename = path.join(dir, `client-logs-${ts}.txt`);
+  try { await fs.mkdir(dir, { recursive: true }); } catch (e) { /* ignore */ }
 
-  const content = (logs as any[]).map(l => (typeof l === 'string' ? l : JSON.stringify(l, null, 2))).join('\n\n');
-  await fs.promises.writeFile(filename, content, 'utf8');
+  const file = path.join(dir, `client-logs-${Date.now()}.jsonl`);
+  const lines = payload.logs.map((l: any) => JSON.stringify({ receivedAt: new Date().toISOString(), ...l })).join('\n') + '\n';
+  await fs.appendFile(file, lines, 'utf8');
 
-  console.info(`[debug] Client logs recibidos: ${filename}`);
-  response.status(201).json({ ok: true, path: filename });
+  console.log(`[debug] client logs saved to ${file} (${payload.logs.length} entries)`);
+  response.json({ ok: true, path: file });
 }));
 
 app.use((error: unknown, _request: Request, response: Response, _next: NextFunction) => {
