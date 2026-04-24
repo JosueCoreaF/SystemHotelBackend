@@ -556,6 +556,8 @@ async function getFreshRoomById(id: string) {
         h.tarifa_noche as tarifa,
         h.estado,
         h.cargo_persona_extra as "cargoPersonaExtra",
+        h.nombre_alias as "nombreAlias",
+        h.tipo as "tipoCustom",
         h.created_at as "createdAt"
       from public.habitaciones h
       join public.hoteles hotel on hotel.id_hotel = h.id_hotel
