@@ -140,9 +140,30 @@ export async function importReservationsToDb(reservations: any[]) {
       let precioNum = Number(r.precio) || 0;
       let estadoReserva = 'confirmada';
 
-      // ── LÓGICA SEGÚN TIPO / ESTADO_PAGO DETECTADO ────────────────────────
-      const estadoPago = r.estado_pago ?? r.tipo ?? 'pagado';
-      const estadoHab = r.estado_habitacion ?? 'ocupada';
+      // Normalizar cadenas de estado para evitar insertar valores no permitidos
+      const normalizeStr = (v: any) => {
+        if (v === null || v === undefined) return '';
+        return String(v).toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '').trim();
+      };
+
+      const rawEstadoPago = r.estado_pago ?? r.tipo ?? 'pagado';
+      const rawEstadoHab = r.estado_habitacion ?? 'ocupada';
+      const estadoPago = normalizeStr(rawEstadoPago);
+      const estadoHabRaw = normalizeStr(rawEstadoHab).replace(/\s+/g, '_');
+
+      const mapEstadoHab = (t: string) => {
+        if (!t) return 'ocupada';
+        if (t.includes('bloque') || t.includes('mantenimiento')) return 'mantenimiento';
+        if (t.includes('no_disponible') || t.includes('nodisponible') || t === 'no_disponible') return 'no_disponible';
+        if (t.includes('reserv')) return 'reservada';
+        if (t.includes('por_confirm')) return 'por_confirmar';
+        if (t.includes('limpieza')) return 'limpieza';
+        if (t.includes('dispon')) return 'disponible';
+        if (t.includes('ocup')) return 'ocupada';
+        return 'ocupada';
+      };
+
+      const estadoHab = mapEstadoHab(estadoHabRaw);
 
       if (estadoPago === 'deuda') {
         estadoReserva = 'confirmada';
@@ -203,10 +224,10 @@ export async function importReservationsToDb(reservations: any[]) {
       if (!esMantenimiento) {
         const empresaIdLink = (r as any)._empresaId ?? null;
         const reservaResult = await client.query(`
-          INSERT INTO public.reservas_hotel (id_huesped, id_hotel, id_habitacion, check_in, check_out, estado, origen_reserva, total_reserva, observaciones, id_empresa)
-          VALUES ($1, $2, $3, $4::timestamptz, ${checkOutSql}, $5, 'recepcion', $6, $7, $8)
+          INSERT INTO public.reservas_hotel (id_huesped, id_hotel, id_habitacion, check_in, check_out, estado, origen_reserva, total_reserva, observaciones, id_empresa, estado_pago, estado_habitacion, detalles_estado)
+          VALUES ($1, $2, $3, $4::timestamptz, ${checkOutSql}, $5, 'recepcion', $6, $7, $8, $9, $10, $11)
           RETURNING id_reserva_hotel
-        `, [huespedId, hotelId, habitacionId, checkInDate + ' ' + hotelConfig.hora_check_in + '-06', estadoReserva, precioNum, obs, empresaIdLink]);
+        `, [huespedId, hotelId, habitacionId, checkInDate + ' ' + hotelConfig.hora_check_in + '-06', estadoReserva, precioNum, obs, empresaIdLink, estadoPago, estadoHab, JSON.stringify(r.detalles || [])]);
         reservaId = reservaResult.rows[0].id_reserva_hotel;
         if (reservaId) insertedIds.push(reservaId);
 

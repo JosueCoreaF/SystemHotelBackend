@@ -5,7 +5,6 @@ import { z } from 'zod';
 import { pool, withTransaction } from './db.js';
 import { registerExtractorRoutes } from './extractorRoutes.js';
 import { registerEmpresasRoutes } from './empresasRoutes.js';
-import { registerReservasRoutes } from './reservasRoutes.js';
 import { ApiError, asyncHandler } from './http.js';
 import { extractUserId, requirePermission } from './permissions.js';
 
@@ -36,7 +35,6 @@ app.get('/api/health', (_req, res) => {
 
 registerExtractorRoutes(app);
 registerEmpresasRoutes(app);
-registerReservasRoutes(app);
 
 const routeId = (request: Request) => String(request.params.id ?? '');
 
@@ -2642,20 +2640,41 @@ app.get('/api/public/disponibilidad', asyncHandler(async (request, response) => 
   `);
 
   let occupiedIds: string[] = [];
+
+  // Fecha de referencia para bloqueos: si vienen fechas usarlas, si no usar hoy
+  const refCheckIn  = checkIn  ?? new Date().toISOString();
+  const refCheckOut = checkOut ?? new Date().toISOString();
+
+  // 1. Reservas activas que pisan el rango solicitado
   if (checkIn && checkOut) {
+    // Comparar a nivel de FECHA local (Honduras UTC-6) para que un check-out el día X
+    // no bloquee un nuevo check-in ese mismo día X.
     const conflicts = await pool.query(`
       select distinct id_habitacion
       from public.reservas_hotel
       where estado not in ('cancelada', 'check_out', 'no_show')
-        and check_in < $2::timestamptz
-        and check_out > $1::timestamptz
+        and (check_in  at time zone 'America/Tegucigalpa')::date
+              < ($2::timestamptz at time zone 'America/Tegucigalpa')::date
+        and (check_out at time zone 'America/Tegucigalpa')::date
+              > ($1::timestamptz at time zone 'America/Tegucigalpa')::date
     `, [checkIn, checkOut]);
     occupiedIds = conflicts.rows.map((r: any) => r.id_habitacion);
   }
 
+  // 2. Bloqueos manuales (bloqueos_habitacion) que pisan el rango
+  const blockedRes = await pool.query(`
+    select distinct id_habitacion
+    from public.bloqueos_habitacion
+    where fecha_inicio <= ($2::timestamptz at time zone 'America/Tegucigalpa')::date
+      and fecha_fin    >= ($1::timestamptz at time zone 'America/Tegucigalpa')::date
+  `, [refCheckIn, refCheckOut]);
+  const blockedIds = blockedRes.rows.map((r: any) => r.id_habitacion);
+
+  const allUnavailable = Array.from(new Set([...occupiedIds, ...blockedIds]));
+
   const result = rooms.rows.map((r: any) => ({
     ...r,
-    disponible: !occupiedIds.includes(r.id),
+    disponible: !allUnavailable.includes(r.id),
   }));
 
   response.json(result);
@@ -2678,18 +2697,45 @@ app.post('/api/public/solicitud-reserva', asyncHandler(async (request, response)
     throw new ApiError(400, 'Faltan campos requeridos: nombre, correo, habitacionId, checkIn, checkOut.');
   }
 
-  // Verificar disponibilidad
+  // Validar política de horarios: check-in >= 14:00, check-out <= 12:00 (hora Honduras UTC-6)
+  const _ciValidDate = new Date(checkIn);
+  const _coValidDate = new Date(checkOut);
+  const ciHourLocal = _ciValidDate.toLocaleString('en-US', { timeZone: 'America/Tegucigalpa', hour: 'numeric', hour12: false });
+  const coHourLocal = _coValidDate.toLocaleString('en-US', { timeZone: 'America/Tegucigalpa', hour: 'numeric', hour12: false });
+  if (Number(ciHourLocal) < 14) {
+    throw new ApiError(400, 'El check-in solo está disponible a partir de las 2:00 PM.');
+  }
+  if (Number(coHourLocal) > 12) {
+    throw new ApiError(400, 'El check-out debe realizarse antes de las 12:00 PM (mediodía).');
+  }
+
+  // Verificar disponibilidad (comparar a nivel de fecha local Honduras UTC-6)
   const conflict = await pool.query(`
     select id_reserva_hotel from public.reservas_hotel
     where id_habitacion = $1
       and estado not in ('cancelada', 'check_out', 'no_show')
-      and check_in < $3::timestamptz
-      and check_out > $2::timestamptz
+      and (check_in  at time zone 'America/Tegucigalpa')::date
+            < ($3::timestamptz at time zone 'America/Tegucigalpa')::date
+      and (check_out at time zone 'America/Tegucigalpa')::date
+            > ($2::timestamptz at time zone 'America/Tegucigalpa')::date
     limit 1
   `, [habitacionId, checkIn, checkOut]);
 
   if (conflict.rows.length > 0) {
     throw new ApiError(409, 'La habitación ya no está disponible para esas fechas.');
+  }
+
+  // Verificar que no haya un bloqueo manual activo para esas fechas
+  const blockConflict = await pool.query(`
+    select id_bloqueo from public.bloqueos_habitacion
+    where id_habitacion = $1
+      and fecha_inicio <= ($3::timestamptz at time zone 'America/Tegucigalpa')::date
+      and fecha_fin    >= ($2::timestamptz at time zone 'America/Tegucigalpa')::date
+    limit 1
+  `, [habitacionId, checkIn, checkOut]);
+
+  if (blockConflict.rows.length > 0) {
+    throw new ApiError(409, 'La habitación no está disponible para esas fechas (bloqueada por mantenimiento).');
   }
 
   // Buscar o crear huésped

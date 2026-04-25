@@ -24766,10 +24766,10 @@
 ----------------------------------------
 
 -> Check-In: 2026-04-25
--> Nombre: JULION ALVAREZ MORAZAN
+-> Nombre: JULION ALVAREZ MORAZAN CONCIERTO
 -> Habitación: 1
 -> Tipo: noche
--> Descripción: Julion alvarez morazan
+-> Descripción: Julion alvarez morazan concierto
 -> Estancia: 1 Noche(s)
 -> Factura: N/A
 -> Precio Total: L.0.00
@@ -24880,6 +24880,17 @@
 -> Celular: N/A
 ----------------------------------------
 
+-> Check-In: 2026-04-20
+-> Nombre: JOHAN VELDEZ
+-> Habitación: 3
+-> Tipo: noche
+-> Descripción: 1 habitacion por 1noche
+-> Estancia: 1 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.1400.00
+-> Celular: N/A
+----------------------------------------
+
 -> Check-In: 2026-04-21
 -> Empresa: EXPEDIA
 -> Huésped: ENDEL RAMOS CARDONA
@@ -24888,7 +24899,52 @@
 -> Descripción: 1 habitacion por 1noche
 -> Estancia: 1 Noche(s)
 -> Factura: N/A
--> Precio Total: L.1246.00
+-> Precio Total: L.1578.00
+-> Celular: N/A
+----------------------------------------
+
+-> Check-In: 2026-04-22
+-> Nombre: PRIMA DE JESUS
+-> Habitación: 3
+-> Tipo: noche
+-> Descripción: 1 habitacion por 1noche sale a las 7.00 am
+-> Estancia: 1 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.1100.00
+-> Celular: N/A
+----------------------------------------
+
+-> Check-In: 2026-04-23
+-> Nombre: ORO MAYA DE HONDURAS
+-> Habitación: 3
+-> Tipo: noche
+-> Descripción: 1 habitacion por 1noche
+-> Estancia: 1 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.1405.00
+-> Celular: N/A
+----------------------------------------
+
+-> Check-In: 2026-04-24
+-> Empresa: FINCA SA BRAYAN PALMA
+-> Huésped: BERNARDO MORALES
+-> Habitación: 3
+-> Tipo: noche
+-> Descripción: Una habitacion por una noche
+-> Estancia: 1 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.1405.00
+-> Celular: N/A
+----------------------------------------
+
+-> Check-In: 2026-04-25
+-> Nombre: ALEX REYES
+-> Habitación: 3
+-> Tipo: noche
+-> Descripción: 1 habitacion por 1noche
+-> Estancia: 1 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.1515.00
 -> Celular: N/A
 ----------------------------------------
 
@@ -25019,6 +25075,39 @@
 -> Celular: N/A
 ----------------------------------------
 
+-> Check-In: 2026-04-22
+-> Nombre: OSMAN ARIEL UNA
+-> Habitación: 4
+-> Tipo: noche
+-> Descripción: Una habitacion una noche
+-> Estancia: 1 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.1515.00
+-> Celular: 9695-5915
+----------------------------------------
+
+-> Check-In: 2026-04-24
+-> Nombre: JESUS CHONG
+-> Habitación: 4
+-> Tipo: noche
+-> Descripción: Una habitacion por una noche tonito le reservo
+-> Estancia: 1 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.1405.00
+-> Celular: N/A
+----------------------------------------
+
+-> Check-In: 2026-04-25
+-> Nombre: MARIA SANDOBAL
+-> Habitación: 4
+-> Tipo: otro
+-> Descripción: N/A
+-> Estancia: 1 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.0.00
+-> Celular: N/A
+----------------------------------------
+
 -> Check-In: 2026-04-29
 -> Nombre: ALIANZA FRANCESA
 -> Habitación: 4
@@ -25109,15 +25198,48 @@
 -> Celular: 9381-3091
 ----------------------------------------
 
--> Check-In: 2026-04-20
--> Nombre: JOHANN VALDEZ
+-> Check-In: 2026-04-21
+-> Nombre: JAIME SIERRA
+-> Habitación: 5
+-> Tipo: noche
+-> Descripción: 1 habitacion por 1noche
+-> Estancia: 1 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.1405.00
+-> Celular: N/A
+----------------------------------------
+
+-> Check-In: 2026-04-22
+-> Nombre: DAVID BUSTILLO
 -> Habitación: 5
 -> Tipo: noche
 -> Descripción: Una habitacion por una noche
 -> Estancia: 1 Noche(s)
 -> Factura: N/A
--> Precio Total: L.1400.00
--> Celular: 9217-7864
+-> Precio Total: L.1408.00
+-> Celular: 9463-6167
+----------------------------------------
+
+-> Check-In: 2026-04-23
+-> Nombre: KETHER ALEPH BUSTAMANTE
+-> Habitación: 5
+-> Tipo: noche
+-> Descripción: Una habitacion por una noche
+-> Estancia: 1 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.1405.00
+-> Celular: 3203-1944
+----------------------------------------
+
+-> Check-In: 2026-04-24
+-> Nombre: XAVIER MARTINEZ
+-> Habitación: 5
+-> Tipo: noche
+-> Descripción: Una habitacion por una noche
+-> Estancia: 1 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.1408.00
+-> Celular: 8801-4525
 ----------------------------------------
 
 -> Check-In: 2026-04-01
@@ -25235,14 +25357,46 @@
 ----------------------------------------
 
 -> Check-In: 2026-04-20
--> Empresa: MEYKO
--> Huésped: BESSY BONILLA
+-> Nombre: JOHNY ANTONIO
 -> Habitación: 6
 -> Tipo: noche
--> Descripción: 1 habitacion por 1 noche
--> Estancia: 2 Noche(s)
+-> Descripción: 1 habitacion por 1noche
+-> Estancia: 1 Noche(s)
 -> Factura: N/A
--> Precio Total: L.2810.00
+-> Precio Total: L.1405.00
+-> Celular: N/A
+----------------------------------------
+
+-> Check-In: 2026-04-21
+-> Nombre: TONI HERMANO ESTHER
+-> Habitación: 6
+-> Tipo: noche
+-> Descripción: Una habitacion por una noche por canje
+-> Estancia: 1 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.0.00
+-> Celular: N/A
+----------------------------------------
+
+-> Check-In: 2026-04-22
+-> Nombre: KETHER ALEPH BUSTAMANTE
+-> Habitación: 6
+-> Tipo: noche
+-> Descripción: Una habitacion por una noche
+-> Estancia: 1 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.1405.00
+-> Celular: 3203-1944
+----------------------------------------
+
+-> Check-In: 2026-04-23
+-> Nombre: EDUARDO TREJO
+-> Habitación: 6
+-> Tipo: noche
+-> Descripción: 1 habitacion por 1noche
+-> Estancia: 3 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.4215.00
 -> Celular: N/A
 ----------------------------------------
 
@@ -25392,6 +25546,39 @@
 -> Celular: N/A
 ----------------------------------------
 
+-> Check-In: 2026-04-19
+-> Nombre: MARTHA
+-> Habitación: 7
+-> Tipo: noche
+-> Descripción: 1 habitacion por 1noche
+-> Estancia: 1 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.1300.00
+-> Celular: N/A
+----------------------------------------
+
+-> Check-In: 2026-04-21
+-> Nombre: EXPEDIA  LUIS BOQUIN
+-> Habitación: 7
+-> Tipo: noche
+-> Descripción: 1 habitacion por 1noche
+-> Estancia: 2 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.3600.00
+-> Celular: N/A
+----------------------------------------
+
+-> Check-In: 2026-04-23
+-> Nombre: JAIRO
+-> Habitación: 7
+-> Tipo: noche
+-> Descripción: 1 habitacion por 1noche
+-> Estancia: 2 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.2810.00
+-> Celular: N/A
+----------------------------------------
+
 -> Check-In: 2026-04-02
 -> Nombre: DORIAN SALDIVAR
 -> Habitación: 8
@@ -25515,6 +25702,17 @@
 -> Celular: 9610-3427
 ----------------------------------------
 
+-> Check-In: 2026-04-24
+-> Nombre: FELIX
+-> Habitación: 8
+-> Tipo: noche
+-> Descripción: 1 habitacion por 1noche según en la llamada llegaria a las 2.00 pm y ocupara taxi que seria un cobro extra
+-> Estancia: 1 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.1408.00
+-> Celular: 9437-1178
+----------------------------------------
+
 -> Check-In: 2026-04-04
 -> Nombre: VALLARDO ZELAYA
 -> Habitación: 9
@@ -25535,6 +25733,39 @@
 -> Factura: N/A
 -> Precio Total: L.5418.00
 -> Celular: 8955-3270
+----------------------------------------
+
+-> Check-In: 2026-04-20
+-> Nombre: GABRIELA CASTRO
+-> Habitación: 9
+-> Tipo: noche
+-> Descripción: 1 habitacion por 1noche
+-> Estancia: 1 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.1405.00
+-> Celular: N/A
+----------------------------------------
+
+-> Check-In: 2026-04-21
+-> Nombre: KILMAN FLORES
+-> Habitación: 9
+-> Tipo: noche
+-> Descripción: 1 habitacion por 1noche
+-> Estancia: 1 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.1600.00
+-> Celular: N/A
+----------------------------------------
+
+-> Check-In: 2026-04-23
+-> Nombre: ALEXANDER GOMEZ
+-> Habitación: 9
+-> Tipo: noche
+-> Descripción: 1 habitacion por 1noche
+-> Estancia: 1 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.1790.00
+-> Celular: N/A
 ----------------------------------------
 
 -> Check-In: 2026-04-01
@@ -25627,6 +25858,50 @@
 -> Celular: N/A
 ----------------------------------------
 
+-> Check-In: 2026-04-20
+-> Nombre: JOSUE HERCULES
+-> Habitación: 11
+-> Tipo: noche
+-> Descripción: 1 habitacion por 1noche
+-> Estancia: 1 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.1400.00
+-> Celular: N/A
+----------------------------------------
+
+-> Check-In: 2026-04-21
+-> Nombre: BENI CAFÉ
+-> Habitación: 11
+-> Tipo: noche
+-> Descripción: 1 habitacion por 1noche
+-> Estancia: 1 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.1514.00
+-> Celular: N/A
+----------------------------------------
+
+-> Check-In: 2026-04-22
+-> Nombre: KARINA BARAHONA ORELLANA SOBRINA DE MOISES
+-> Habitación: 11
+-> Tipo: otro
+-> Descripción: N/A
+-> Estancia: 1 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.0.00
+-> Celular: N/A
+----------------------------------------
+
+-> Check-In: 2026-04-24
+-> Nombre: INSTAGRAM JENNY BONILLA
+-> Habitación: 11
+-> Tipo: noche
+-> Descripción: Una habiatcion por una noche
+-> Estancia: 1 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.1405.00
+-> Celular: N/A
+----------------------------------------
+
 -> Check-In: 2026-04-01
 -> Nombre: RADIO NORTE RAMON PORFIRIO
 -> Habitación: 12
@@ -25681,6 +25956,29 @@
 -> Factura: N/A
 -> Precio Total: L.2810.00
 -> Celular: 9457-7957
+----------------------------------------
+
+-> Check-In: 2026-04-20
+-> Nombre: JOSUE HERCULES
+-> Habitación: 12
+-> Tipo: noche
+-> Descripción: 1 habitacion por 1noche
+-> Estancia: 1 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.1400.00
+-> Celular: N/A
+----------------------------------------
+
+-> Check-In: 2026-04-24
+-> Empresa: MARCOS SANTOS
+-> Huésped: MARIA DEL CARMEN BARAHONA
+-> Habitación: 12
+-> Tipo: otro
+-> Descripción: N/A
+-> Estancia: 2 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.2600.00
+-> Celular: N/A
 ----------------------------------------
 
 -> Check-In: 2026-04-02
@@ -25761,14 +26059,36 @@
 -> Celular: 3321-5024
 ----------------------------------------
 
--> Check-In: 2026-04-21
--> Nombre: XAVIER LARIOS
+-> Check-In: 2026-04-20
+-> Nombre: TONI HERMANO ESTHER
+-> Habitación: 13
+-> Tipo: noche
+-> Descripción: Una habitacion por una noche por canje
+-> Estancia: 1 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.0.00
+-> Celular: N/A
+----------------------------------------
+
+-> Check-In: 2026-04-23
+-> Nombre: MARIA MOLINA
 -> Habitación: 13
 -> Tipo: noche
 -> Descripción: 1 habitacion por 1noche
 -> Estancia: 1 Noche(s)
 -> Factura: N/A
--> Precio Total: L.2000.00
+-> Precio Total: L.1800.00
+-> Celular: N/A
+----------------------------------------
+
+-> Check-In: 2026-04-24
+-> Nombre: TONI HERMANO ESTHER
+-> Habitación: 13
+-> Tipo: noche
+-> Descripción: Una habitacion por una noche por canje
+-> Estancia: 1 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.0.00
 -> Celular: N/A
 ----------------------------------------
 
@@ -25814,6 +26134,39 @@
 -> Estancia: 5 Noche(s)
 -> Factura: N/A
 -> Precio Total: L.8900.00
+-> Celular: N/A
+----------------------------------------
+
+-> Check-In: 2026-04-21
+-> Nombre: KILMAN FLORES
+-> Habitación: 14
+-> Tipo: noche
+-> Descripción: 1 habitacion por 1noche
+-> Estancia: 1 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.1800.00
+-> Celular: N/A
+----------------------------------------
+
+-> Check-In: 2026-04-22
+-> Nombre: DISTRIBUIDORA EDT DE HONDURAS
+-> Habitación: 14
+-> Tipo: noche
+-> Descripción: Una habitacion por una noche
+-> Estancia: 1 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.1805.00
+-> Celular: 3179-9479
+----------------------------------------
+
+-> Check-In: 2026-04-23
+-> Nombre: CRISTINA ARDON
+-> Habitación: 14
+-> Tipo: noche
+-> Descripción: 1 habitacion por 1noche
+-> Estancia: 2 Noche(s)
+-> Factura: N/A
+-> Precio Total: L.3614.00
 -> Celular: N/A
 ----------------------------------------
 
