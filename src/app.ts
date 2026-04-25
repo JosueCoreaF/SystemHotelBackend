@@ -1,12 +1,11 @@
 import cors from 'cors';
 import express from 'express';
-import fs from 'fs/promises';
-import path from 'path';
 import type { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 import { pool, withTransaction } from './db.js';
 import { registerExtractorRoutes } from './extractorRoutes.js';
 import { registerEmpresasRoutes } from './empresasRoutes.js';
+import { registerReservasRoutes } from './reservasRoutes.js';
 import { ApiError, asyncHandler } from './http.js';
 import { extractUserId, requirePermission } from './permissions.js';
 
@@ -37,6 +36,7 @@ app.get('/api/health', (_req, res) => {
 
 registerExtractorRoutes(app);
 registerEmpresasRoutes(app);
+registerReservasRoutes(app);
 
 const routeId = (request: Request) => String(request.params.id ?? '');
 
@@ -2782,31 +2782,6 @@ app.get('/api/public/local-guide', asyncHandler(async (_request, response) => {
     order by sort_order asc, created_at desc
   `);
   response.json(result.rows);
-}));
-
-// Dev-only: recibir logs del cliente para diagnóstico en entorno local
-app.post('/api/debug/client-logs', asyncHandler(async (request, response) => {
-  // Protegemos para que no esté accesible en producción por defecto,
-  // pero permitimos envíos desde localhost para facilitar desarrollo local.
-  const hostHeader = String(request.headers.host ?? '').split(':')[0];
-  if (process.env.NODE_ENV === 'production' && hostHeader !== 'localhost' && hostHeader !== '127.0.0.1') {
-    throw new ApiError(404, 'Not found');
-  }
-
-  const payload = request.body as any;
-  if (!payload || !Array.isArray(payload.logs)) {
-    return response.status(400).json({ error: 'invalid payload, expected { logs: [] }' });
-  }
-
-  const dir = path.join(process.cwd(), 'reportes_generados');
-  try { await fs.mkdir(dir, { recursive: true }); } catch (e) { /* ignore */ }
-
-  const file = path.join(dir, `client-logs-${Date.now()}.jsonl`);
-  const lines = payload.logs.map((l: any) => JSON.stringify({ receivedAt: new Date().toISOString(), ...l })).join('\n') + '\n';
-  await fs.appendFile(file, lines, 'utf8');
-
-  console.log(`[debug] client logs saved to ${file} (${payload.logs.length} entries)`);
-  response.json({ ok: true, path: file });
 }));
 
 app.use((error: unknown, _request: Request, response: Response, _next: NextFunction) => {
