@@ -178,16 +178,26 @@ COMMENT ON FUNCTION public.fn_calcular_monto_conversion_pago() IS
 ALTER TABLE public.hoteles
 ADD COLUMN IF NOT EXISTS estado text DEFAULT 'activo';
 
--- Agregar CHECK constraint si es necesario
-ALTER TABLE public.hoteles
-ADD CONSTRAINT chk_hoteles_estado CHECK (estado IN ('activo', 'inactivo', 'en_mantenimiento')) NOT VALID;
+-- Agregar CHECK constraint si es necesario (idempotente)
+DO $$
+BEGIN
+  ALTER TABLE public.hoteles
+  ADD CONSTRAINT chk_hoteles_estado CHECK (estado IN ('activo', 'inactivo', 'en_mantenimiento')) NOT VALID;
+EXCEPTION WHEN duplicate_object THEN NULL;
+END
+$$;
 
 -- Lo mismo para tipos_habitacion
 ALTER TABLE public.tipos_habitacion
 ADD COLUMN IF NOT EXISTS estado text DEFAULT 'activo';
 
-ALTER TABLE public.tipos_habitacion
-ADD CONSTRAINT chk_tipos_habitacion_estado CHECK (estado IN ('activo', 'inactivo')) NOT VALID;
+DO $$
+BEGIN
+  ALTER TABLE public.tipos_habitacion
+  ADD CONSTRAINT chk_tipos_habitacion_estado CHECK (estado IN ('activo', 'inactivo')) NOT VALID;
+EXCEPTION WHEN duplicate_object THEN NULL;
+END
+$$;
 
 -- Crear índices en la columna estado para filtrados rápidos
 CREATE INDEX IF NOT EXISTS idx_hoteles_estado ON public.hoteles(estado);
